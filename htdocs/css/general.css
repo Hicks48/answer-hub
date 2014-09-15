@@ -1,0 +1,17 @@
+h1 {
+	padding: 15px;
+
+	color: white;
+	background-color: black;
+	
+	font-family: arial, helvetica, sans-serif;
+	letter-spacing: 0.1em;
+	
+	border-bottom-style: solid;
+    border-bottom-width: 0.5em;
+    border-bottom-color: green;
+}
+
+body {
+	padding: 20px;
+}
