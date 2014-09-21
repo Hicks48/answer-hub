@@ -23,11 +23,6 @@ $app->get('/login', function(){
 	User_Controller::show_log_in_page();
 });
 
-/* questions page */
-$app->get('/questions/:id', function($id) {
-	Question_Controller::show($id);
-});
-
 /* new question page */
 $app->get('/questions/new', function() {
 	Question_Controller::create_page();
@@ -36,6 +31,11 @@ $app->get('/questions/new', function() {
 /* create question */
 $app->post('/questions/create', function() {
 	Question_Controller::create_question();
+});
+
+/* questions page */
+$app->get('/questions/:id', function($id) {
+	Question_Controller::show($id);
 });
 
 /* user page */
@@ -62,7 +62,7 @@ $app->get('/questions-json', function() {
 
 /* question with id */
 $app->get('/questions-json/:id', function($id) {
-	
+	echo json_encode(Question_Model::find_question($id));
 });
 
 /* questions search */

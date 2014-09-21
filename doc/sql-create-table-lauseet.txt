@@ -1,0 +1,57 @@
+CREATE TABLE users
+(
+	id int NOT NULL UNIQUE AUTO_INCREMENT,
+	username varchar(50) NOT NULL UNIQUE,
+	password varchar(20) NOT NULL CHECK(password.length >= 8 AND password.length <= 20),
+	email varchar(100) NOT NULL,
+	PRIMARY KEY(id)
+);
+
+CREATE TABLE questions
+(
+	id int NOT NULL UNIQUE AUTO_INCREMENT,
+	title varchar(100) NOT NULL,
+	question text NOT NULL,
+	asked_by int NOT NULL,
+	time_asked timestamp NOT NULL,
+	last_edited timestamp NOT NULL,
+	PRIMARY KEY(id),
+	FOREIGN KEY(asked_by) REFERENCES users(id)
+);
+
+CREATE TABLE answers
+(
+	id int NOT NULL UNIQUE AUTO_INCREMENT,
+	question_id int NOT NULL,
+	answer_by int NOT NULL,
+	answer text NOT NULL,
+	time_answered timestamp NOT NULL,
+	PRIMARY KEY(id),
+	FOREIGN KEY(answer_by) REFERENCES users(id),
+	FOREIGN KEY(question_id) REFERENCES questions(id)
+);
+
+
+CREATE TABLE tags
+(
+	id int NOT NULL UNIQUE AUTO_INCREMENT,
+	name varchar(25) NOT NULL,
+	PRIMARY KEY(id)
+);
+
+CREATE TABLE questions_to_tags
+(
+	question_id int NOT NULL,
+	tag_id int NOT NULL,
+	FOREIGN KEY(question_id) REFERENCES questions(id),
+	FOREIGN KEY(tag_id) REFERENCES tags(id)
+);
+
+CREATE TABLE ratings
+(
+	id int NOT NULL UNIQUE AUTO_INCREMENT,
+	question_id int NOT NULL,
+	rating int NOT NULL CHECK(rating >= 0 AND rating <= 5),
+	PRIMARY KEY(id),
+	FOREIGN KEY(question_id) REFERENCES questions(id)
+);

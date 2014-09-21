@@ -1,60 +1,52 @@
 <?php
 	class Question_Model {
+		public $id;
+		public $title;
+		public $question;
+		public $asked_by;
+		public $time_asked;
+		
+		public function __construct($attributes) {
+			$this->id = $attributes['id'];
+			$this->title = $attributes['title'];
+			$this->question = $attributes['question'];
+			$this->asked_by = $attributes['asked_by'];
+			$this->time_asked = $attributes['time_asked'];
+		}
 	
 		public static function find_question($id) {
-			
+			$id_array['id'] = $id;
+			return self::gather_data(Utils::execute_query("SELECT * FROM questions WHERE id=:id", $id_array))[0];
 		}
 	
 		public static function find_all() {
-			$connection = Utils::database_connection();
-			
-			$find_all_query = "SELECT id, title, question, asked_by, time_asked FROM questions ORDER BY time_asked";
-			
-			$query = $connection->prepare($find_all_query);
-			
-			if($query->execute()) {
-				header('location: /');
-			}
-			
-			else {
-				
-			}
-			
-			$index = 0;
-			while($line = $query->fetch()) {
-				$question_object['id'] = $line['id'];
-				$question_object['title'] = $line['title'];
-				$question_object['question'] = $line['question'];
-				$question_object['asked_by'] = $line['asked_by'];
-				$question_object['time_asked'] = $line['time_asked'];
-				
-				$result[$index] = $question_object;
-				$index ++;
-			}
-			
-			return $result;
+			return self::gather_data(Utils::execute_query("SELECT * FROM questions ORDER BY time_asked"));
 		}
 		
 		public static function save_question($question) {
-			
-			/* add user who asked the question */
 			$question['asked_by'] = 1;
+									
+			Utils::execute_query("INSERT INTO questions (title, question, asked_by, time_asked, last_edited) 
+			VALUES(:title, :question, :asked_by, NOW(), NOW())", $question);
+		}
+		
+		private static function gather_data($query) {
+			$result = [];
 			
-			/* Insert question */
-			$connection = Utils::database_connection();
-			
-			$question_insert_query = "INSERT INTO questions (title, question, asked_by, time_asked, last_edited) 
-			VALUES(:title, :question, :asked_by, NOW(), NOW())";
-			
-			$query = $connection->prepare($question_insert_query);
-			
-			if($query->execute($question)) {
-				header('location: /');
-			}
-			
-			else {
+			while($line = $query->fetch()) {
+
+				$question_object = new Question_Model(array(
+					'id' => $line['id'],
+					'title' => $line['title'],
+					'question' => $line['question'],
+					'asked_by' => $line['asked_by'],
+					'time_asked' => $line['time_asked']
+				));
 				
+				array_push($result, $question_object);
 			}
+			
+			return $result;
 		}
 	}
 ?>

@@ -1,4 +1,4 @@
-h1 {
+h1#answer-hub-title {
 	padding: 15px;
 
 	color: white;
@@ -10,6 +10,14 @@ h1 {
 	border-bottom-style: solid;
     border-bottom-width: 0.5em;
     border-bottom-color: green;
+}
+
+h1#answer-hub-title a {
+	color: white;
+}
+
+h1#answer-hub-title a:hover {
+	color: white;
 }
 
 body {

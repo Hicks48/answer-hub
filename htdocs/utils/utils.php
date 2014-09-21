@@ -10,5 +10,19 @@
 			
 			return $connection;
 		}
+		
+		public static function execute_query($query, $atrribute_values = array()) {
+			$connection = self::database_connection();
+						
+			$query_prepared = $connection->prepare($query);
+			
+			$query_prepared->execute($atrribute_values);
+			
+			return $query_prepared;
+		}
+		
+		public static function render_content($content, $data = array()) {
+			require_once "views/general-template.php";
+		}
 	}
 ?>

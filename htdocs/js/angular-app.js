@@ -1,0 +1,1 @@
+var AnswerHubApp = angular.module('AnswerHubApp',[]);

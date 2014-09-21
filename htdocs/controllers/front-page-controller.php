@@ -4,7 +4,7 @@
 	class Frontpage_Controller {
 	
 		public static function show() {
-			require 'views/front-page.php';
+			Utils::render_content('views/front-page.php');
 		}
 	}
 

@@ -7,6 +7,7 @@
 		
 		public static function create_user() {
 			User_Model::save_user();
+			header('location: /');
 		}
 		
 		public static function edit($id) {
@@ -14,7 +15,7 @@
 		}
 		
 		public static function show_log_in_page() {
-			require 'views/login-page.php';
+			Utils::render_content('views/login-page.php');
 		}
 		
 		public static function log_in() {
