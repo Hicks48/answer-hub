@@ -1,5 +1,6 @@
 <?php
 	class Utils {
+		private static $redirect_message;
 		
 		public static function database_connection() {
 			$id = "root";
@@ -23,6 +24,25 @@
 		
 		public static function render_content($content, $data = array()) {
 			require_once "views/general-template.php";
+		}
+		
+		public static function redirect_to($url, $message = "") {
+			header('Location: ' . $url);
+			self::$redirect_message = $message;
+			exit();
+		}
+		
+		public static function get_redirect_message() {
+			
+			if(is_null(self::$redirect_message)) {
+				return "";
+			}
+			
+			return self::$redirect_message;
+		}
+		
+		public static function throw_exception() {
+			header("HTTP/1.1 500 Internal Server Error");
 		}
 	}
 ?>

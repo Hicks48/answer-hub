@@ -1,3 +1,19 @@
+#top-menu{
+	padding: 15px;
+
+	color: white;
+	background-color: black;
+	
+	font-family: arial, helvetica, sans-serif;
+	letter-spacing: 0.1em;
+	
+	border-bottom-style: solid;
+    border-bottom-width: 0.5em;
+    border-bottom-color: green;
+    
+    position: relative;
+}
+
 h1#answer-hub-title {
 	padding: 15px;
 
@@ -12,12 +28,36 @@ h1#answer-hub-title {
     border-bottom-color: green;
 }
 
-h1#answer-hub-title a {
+#top-menu a {
 	color: white;
 }
 
-h1#answer-hub-title a:hover {
+#top-menu a:hover {
 	color: white;
+}
+
+#top-menu #login-link {
+	font-size: 18px;
+
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+#top-menu #logout-link {
+	font-size: 18px;
+
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+#top-menu #username-label {
+	font-size: 18px;
+
+	position: absolute;
+	top: 10px;
+	right: 40px;
 }
 
 body {

@@ -2,7 +2,8 @@ CREATE TABLE users
 (
 	id int NOT NULL UNIQUE AUTO_INCREMENT,
 	username varchar(50) NOT NULL UNIQUE,
-	password varchar(20) NOT NULL CHECK(password.length >= 8 AND password.length <= 20),
+	password varchar(20) NOT NULL,
+	admin bit NOT NULL,
 	email varchar(100) NOT NULL,
 	PRIMARY KEY(id)
 );
@@ -51,7 +52,9 @@ CREATE TABLE ratings
 (
 	id int NOT NULL UNIQUE AUTO_INCREMENT,
 	question_id int NOT NULL,
-	rating int NOT NULL CHECK(rating >= 0 AND rating <= 5),
+	rating int NOT NULL,
+	rated_by int NOT NULL,
 	PRIMARY KEY(id),
-	FOREIGN KEY(question_id) REFERENCES questions(id)
+	FOREIGN KEY(question_id) REFERENCES questions(id),
+	FOREIGN KEY(rated_by) REFERENCES users(id)
 );

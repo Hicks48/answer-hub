@@ -4,12 +4,12 @@
 	<form method="post" action="/users/login">
 		<div class="form-group">
 			<label>username:</label>
-			<input type="text" name="username" class="form-control">
+			<input type="text" name="login-username" class="form-control">
 		</div>
 				
 		<div class="form-group">
 			<label>password:</label>
-			<input type="password" name="password" class="form-control">
+			<input type="password" name="login-password" class="form-control">
 		</div>
 				
 			<input type="submit" value="log in">
@@ -21,24 +21,24 @@
 		
 	<form method="post" action="/users/create">
 		<div class="form-group">
-			<label>Username</label>
-			<input type="text" name="username" class="form-control">
+			<label>username</label>
+			<input type="text" name="new-user-username" class="form-control">
 		</div>
 			
 				
 		<div class="form-group">
 			<label>email:</label> 
-			<input type="email" name="email" class="form-control">
+			<input type="email" name="new-user-email" class="form-control">
 		</div>
 								
 		<div class="form-group">
 			<label>password:</label>
-			<input type="password" name="pass" class="form-control">
+			<input type="password" name="new-user-password" class="form-control">
 		</div>
 								
 		<div class="form-group">
 			<label>password again:</label> 
-			<input type="password" name="pass-again" class="form-control">
+			<input type="password" name="new-user-password-again" class="form-control">
 		</div>
 								
 		<input type="submit" value="create user">

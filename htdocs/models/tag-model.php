@@ -9,7 +9,11 @@
 		}
 		
 		public static function find_all() {
-			self::gather_data(Utils::execute_query("SELECT * FROM tags"));
+			return self::gather_data(Utils::execute_query("SELECT * FROM tags"));
+		}
+		
+		public static function find_tag($id) {
+			return self::gather_data(Utils::execute_query("SELECT * FROM tags WHERE id = :id", array('id' => $id)));
 		}
 		
 		public static function save_tag($name) {

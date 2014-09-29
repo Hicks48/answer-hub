@@ -1,5 +1,7 @@
 <div id="search-view" class="table table-striped">
-	<h2>Search</h2>
+	<p>All questions can be found from <a href="/questions/all">here</a></p>
+
+	<h2>Search By Tag</h2>
 	<form>
 		<input type="text" name="search-input">
 		<input type="submit" value="search">
@@ -19,7 +21,7 @@
 		<tr ng-repeat="q in recent_questions">
 			<td><a href="/questions/{{q.id}}">{{q.title}}</a></td>
 			<td>{{q.time_asked}}</td>
-			<td>{{q.asked_by}}</td>
+			<td>{{q.asked_by.username}}</td>
 		</tr>
 	</table>
 </div>
@@ -31,7 +33,7 @@
 		<tr ng-repeat="q in top_rated_questions">
 			<td><a href="/questions/{{q.id}}">{{q.title}}</a></td>
 			<td>{{q.time_asked}}</td>
-			<td>{{q.asked_by}}</td>
+			<td>{{q.asked_by.username}}</td>
 		</tr>
 	</table>
 </div>
