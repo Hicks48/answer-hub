@@ -11,6 +11,16 @@
 			$this->rating = $attributes['rating'];
 		}
 		
+		public static function user_has_given_rating($user, $question_id) {
+			$result = self::gather_data(Utils::execute_query("SELECT * FROM ratings WHERE rated_by = :user_id AND question_id = :question_id", array('user_id' => $user->id, 'question_id' => $question_id)));
+			
+			if(empty($result)) {
+				return false;
+			}
+			
+			return true;
+		}
+		
 		public static function get_rating_for_question($question_id) {
 			$question_id_array = [];
 			$question_id_array['question_id'] = $question_id;
@@ -18,11 +28,16 @@
 			$result = self::gather_data(Utils::execute_query("SELECT DISTINCT * FROM ratings WHERE question_id = :question_id",
 			 $question_id_array));
 			 
+			 /* no ratings found for question */
+			 if(empty($result)) {
+			 	return 'not yet rated';
+			 }
+			 
 			 /* count avarage */
 			 $sum = 0;
 			 
 			 foreach ($result as $rating) {
-			 	$sum = $sum + $rating['rating'];
+			 	$sum = $sum + $rating->rating;
 			 }
 			 
 			 return $sum / count($result);
@@ -47,10 +62,10 @@
 		}
 		
 		public static function save_rating($rating) {
-			Utils::execute_query("INSERT INTO ratings (question_id, rating) VALUES(:question_id, :rating)", $rating);
+			Utils::execute_query("INSERT INTO ratings (question_id, rating, rated_by) VALUES(:question_id, :rating, :rated_by)", $rating);
 		}
 		
-		private static function gather_data() {
+		private static function gather_data($query) {
 			$result = [];
 			
 			while($line = $query->fetch()) {

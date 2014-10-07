@@ -4,14 +4,12 @@
 		public $username;
 		public $password;
 		public $email;
-		public $admin;
 		
 		public function __construct($attributes) {
 			$this->id = $attributes['id'];
 			$this->username = $attributes['username'];
 			$this->password = $attributes['password'];
 			$this->email = $attributes['email'];
-			$this->admin = $attributes['admin'];
 		}
 		
 		public static function find_user($id) {			
@@ -23,13 +21,23 @@
 			$attributes['username'] = $given_username;
 			$attributes['password'] = $given_password;
 			
-			return self::gather_data(Utils::execute_query("SELECT * FROM users WHERE username = :username AND password = :password", $attributes))[0];
+			try {
+				return self::gather_data(Utils::execute_query("SELECT * FROM users WHERE username = :username AND password = :password", $attributes))[0];
+			}
+			
+			catch(Exception $e) {
+				return null;
+			}
 		}
 		
 		public static function save_user($user) {
+						
+			$connection = Utils::database_connection();
+			$query_prepared = $connection->prepare("INSERT INTO users (username, password, email, admin)
+			VALUES(:username, :password, :email, 0)");
+			$query_prepared->execute($user);
 			
-			Utils::execute_query("INSERT INTO users (username, password, email)
-			VALUES(:username, :password, :email)", $user);
+			return self::gather_data(Utils::execute_query("SELECT * FROM users WHERE id = :id", array('id' => $connection->lastInsertId())))[0];
 		}
 		
 		public static function update_user_info($user) {
@@ -59,8 +67,7 @@
 					'id' => $line['id'],
 					'username' => $line['username'],
 					'password' => $line['password'],
-					'email' => $line['email'],
-					'admin' => $line['admin']
+					'email' => $line['email']
 				));
 				
 				array_push($result, $user_object);

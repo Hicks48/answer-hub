@@ -1,13 +1,12 @@
 <?php
 	class Utils {
-		private static $redirect_message;
-		
 		public static function database_connection() {
 			$id = "root";
 			$password = "root";
 
 			$connection = new PDO("mysql:host=localhost;port=8889;dbname=answer-hub-db", $id, $password);
 			$connection->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+			$connection->exec("SET NAMES utf8");
 			
 			return $connection;
 		}
@@ -28,21 +27,24 @@
 		
 		public static function redirect_to($url, $message = "") {
 			header('Location: ' . $url);
-			self::$redirect_message = $message;
+			$_SESSION['message'] = $message;
 			exit();
 		}
 		
 		public static function get_redirect_message() {
+			$message = "";
 			
-			if(is_null(self::$redirect_message)) {
-				return "";
+			if(isset($_SESSION['message'])) {
+				$message = $_SESSION['message'];
+				unset($_SESSION['message']);
 			}
 			
-			return self::$redirect_message;
+			return $message;
 		}
 		
 		public static function throw_exception() {
 			header("HTTP/1.1 500 Internal Server Error");
+			exit();
 		}
 	}
 ?>

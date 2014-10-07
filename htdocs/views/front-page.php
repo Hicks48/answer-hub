@@ -2,16 +2,21 @@
 	<p>All questions can be found from <a href="/questions/all">here</a></p>
 
 	<h2>Search By Tag</h2>
-	<form>
-		<input type="text" name="search-input">
-		<input type="submit" value="search">
-	</form>
-			
-	<table class="table">
-		<tr>
-			<td></td>
-		</tr>
-	</table>
+	<div ng-controller="SearchController">
+		<div class="alert alert-danger" ng-show="results_message">{{results_message}}</div>
+		<form ng-submit="do_search()">
+			<input type="text" name="search-input" ng-model="search_input">
+			<input type="submit" value="search" class="btn btn-success">
+		</form>
+				
+		<table class="table">
+			<tr ng-repeat="q in search_results">
+				<td><a href="/questions/{{q.id}}">{{q.title}}</a></td>
+				<td>{{q.time_asked}}</td>
+				<td>{{q.asked_by.username}}</td>
+			</tr>
+		</table>
+	</div>
 </div>
 		
 <div id="recently-asked-view" ng-controller="RecentlyAskedController"  class="table table-striped">
@@ -31,6 +36,7 @@
 			
 	<table class="table">
 		<tr ng-repeat="q in top_rated_questions">
+			<td>{{q.rating}}</td>
 			<td><a href="/questions/{{q.id}}">{{q.title}}</a></td>
 			<td>{{q.time_asked}}</td>
 			<td>{{q.asked_by.username}}</td>

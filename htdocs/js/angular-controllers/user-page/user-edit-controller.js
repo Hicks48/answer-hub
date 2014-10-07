@@ -21,9 +21,11 @@ AnswerHubApp.controller('UserEditController', ['$scope','$http', function($scope
 			data: { old_password: $scope.old_password, new_password: $scope.new_password, new_password_again: $scope.new_password_again }
 		}).done(function(){
 			$scope.edit_password_message = 'User password updated!';
+			$scope.edit_password_fail_message = '';
 			$scope.$apply();
 		}).fail(function() {
 			$scope.edit_password_fail_message = 'Password not updated!!';
+			$scope.edit_password_message = '';
 			$scope.$apply();
 		});
 	}

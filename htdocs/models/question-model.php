@@ -7,6 +7,7 @@
 		public $question;
 		public $asked_by;
 		public $time_asked;
+		public $rating;
 		
 		public function __construct($attributes) {
 			$this->id = $attributes['id'];
@@ -17,8 +18,13 @@
 		}
 	
 		public static function find_question($id) {
-			$id_array['id'] = $id;
-			return self::gather_data(Utils::execute_query("SELECT * FROM questions WHERE id=:id", $id_array))[0];
+			try {	
+				return self::gather_data(Utils::execute_query("SELECT * FROM questions WHERE id=:id", array('id' => $id)))[0];
+			}
+			
+			catch(Exception $e) {
+				return null;
+			}
 		}
 		
 		public static function find_questions_for_user($user_id) {
@@ -30,16 +36,26 @@
 		}
 		
 		public static function save_question($question) {
-			$question['asked_by'] = 1;
-									
-			Utils::execute_query("INSERT INTO questions (title, question, asked_by, time_asked, last_edited) 
-			VALUES(:title, :question, :asked_by, NOW(), NOW())", $question);
-			
-			return self::gather_data(Utils::execute_query("SELECT * FROM questions WHERE id = LAST_INSERT_ID()"));
+			$connection = Utils::database_connection();
+			$query_prepared = $connection->prepare("INSERT INTO questions (title, question, asked_by, time_asked, last_edited) 
+			VALUES(:title, :question, :asked_by, NOW(), NOW())");
+			$query_prepared->execute($question);
+													
+			return self::gather_data(Utils::execute_query("SELECT * FROM questions WHERE id = :last_inserted_id", array('last_inserted_id' => $connection->lastInsertId())))[0];
 		}
 		
 		public static function edit_question($question) {
-			
+			Utils::execute_query("UPDATE questions SET title = :title, question = :question WHERE id = :id",
+			array(
+				'title' => $question->title,
+				'question' => $question->question,
+				'id' => $question->id
+			));
+		}
+		
+		public static function edit_tags($question, $new_tags) {
+			Questions_To_Tags_Model::remove_all_tags_from_question($question);
+			Questions_To_Tags_Model::add_tags_to_question($new_tags, $question);
 		}
 		
 		public static function delete_question($question) {
@@ -47,10 +63,35 @@
 			Utils::execute_query("DELETE FROM answers WHERE question_id = :question_id", array('question_id' => $question->id));
 			
 			/* Delete tag relationships to question */
-			Utils::execute_query("DELETE FROM questions_to_tags WHERE question_id = :question_id", array('question_id' => $question->id));
+			Questions_To_Tags_Model::remove_all_tags_from_question($question);
+			
+			/* Delete rating sor question */
+			Utils::execute_query("DELETE FROM ratings WHERE question_id = :question_id", array('question_id' => $question->id));
 			
 			/* Delete question */
 			Utils::execute_query("DELETE FROM questions WHERE id = :id", array('id' => $question->id));
+		}
+		
+		public static function do_search($tags) {
+			$tag_query = '';
+			for($i = 0;$i < count($tags);$i ++) {
+				
+				if($i == count($tags) - 1) {
+					$tag_query = $tag_query . 'tags.id = ' . $tags[$i]->id;
+				}
+				
+				else {
+					$tag_query = $tag_query . 'tags.id = ' . $tags[$i]->id . ' OR ';
+				}
+			}
+			
+			$query = 
+			'SELECT DISTINCT questions.id, questions.title, questions.question, questions.asked_by, questions.time_asked 
+			FROM questions, questions_to_tags, tags 
+			WHERE questions_to_tags.question_id = questions.id AND questions_to_tags.tag_id = tags.id AND tags.id IN ( SELECT id FROM tags WHERE ' . $tag_query .
+			') ORDER BY questions.time_asked';
+		
+			return self::gather_data(Utils::execute_query($query));
 		}
 		
 		private static function gather_data($query) {

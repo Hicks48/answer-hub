@@ -12,7 +12,7 @@
 			<input type="password" name="login-password" class="form-control">
 		</div>
 				
-			<input type="submit" value="log in">
+			<input type="submit" value="log in" class="btn btn-default">
 	</form>
 </div>
 		
@@ -41,6 +41,6 @@
 			<input type="password" name="new-user-password-again" class="form-control">
 		</div>
 								
-		<input type="submit" value="create user">
+		<input type="submit" value="create user" class="btn btn-default">
 	</form>
 </div>

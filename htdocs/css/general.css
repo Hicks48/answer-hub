@@ -8,7 +8,7 @@
 	letter-spacing: 0.1em;
 	
 	border-bottom-style: solid;
-    border-bottom-width: 0.5em;
+    border-bottom-width: 2em;
     border-bottom-color: green;
     
     position: relative;
@@ -21,10 +21,10 @@ h1#answer-hub-title {
 	background-color: black;
 	
 	font-family: arial, helvetica, sans-serif;
-	letter-spacing: 0.1em;
+	letter-spacing: 2em;
 	
 	border-bottom-style: solid;
-    border-bottom-width: 0.5em;
+    border-bottom-width: 110px;
     border-bottom-color: green;
 }
 
@@ -44,20 +44,66 @@ h1#answer-hub-title {
 	right: 10px;
 }
 
-#top-menu #logout-link {
-	font-size: 18px;
-
-	position: absolute;
-	top: 10px;
-	right: 10px;
-}
-
 #top-menu #username-label {
 	font-size: 18px;
 
+	margin-right: 20px;
+}
+
+#message-box {
+	background-color: orange;
+	
+	border-style: double;
+	border-width: 5px;
+	border-color: white;
+	
+	padding-left: 50px;
+	padding-right: 50px;
+	padding-bottom: 20px;
+	padding-top: 10px;
+	
+	font-size: 20px;
+	color: white; 
+}
+
+#question-title {
+	padding-left: 20px;
+	padding-top: 10px;
+	
+	font-size: 40px;
+	text-decoration: underline;
+}
+
+#question-asked-by {
+	padding-left: 20px;
+	padding-top: 10px;
+	
+	font-size: 14px;
+	color: gray;
+}
+
+#rating-container {
 	position: absolute;
-	top: 10px;
+	
+	top: 250px;
 	right: 40px;
+	
+	font-size: 14px;
+}
+
+#question-tags-container {
+	padding-left: 20px;
+	padding-top: 10px;
+	
+	font-size: 14px;
+	color: gray;
+}
+
+#question-panel {
+	padding-left: 20px;
+	
+	font-size: 18px;
+	min-height: 200px;
 }
 
 body {

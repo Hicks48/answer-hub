@@ -16,24 +16,38 @@
 		}
 		
 		public static function create_user() {
-			$user = [];
+			$user = array();
 			
 			$user['username'] = $_POST['new-user-username'];
 			$user['email'] = $_POST['new-user-email'];
 			$user['password'] = $_POST['new-user-password'];
 			
-			if(!self::validate_password($_POST['password'])) {
-				Utils::redirect_to('location: /login', "Ivalid password. Password must contain at least 8 characters!");
+			print_r($user);
+			
+			if(!self::validate_user_data($user)) {
+				Utils::redirect_to('/login', "Invalid user info. Email and username must be provided!");
+				return;
+			}
+			
+			if(!self::validate_password($_POST['new-user-password'])) {
+				Utils::redirect_to('/login', "Invalid password. Password must contain at least 8 characters!");
 				return;
 			}
 			
 			if($_POST['new-user-password'] =! $_POST['new-user-password-again']) {
-				Utils::redirect_to('location: /login', "Password wasn't writen twice correctly!");
+				Utils::redirect_to('/login', "Password wasn't writen twice correctly!");
 				return;
 			}
 			
-			User_Model::save_user($user);
-			Utils::redirect_to('location: /users/show', "Welcome to AnswerHub " . $user['username'] . "!");
+			try {
+				$created_user = User_Model::save_user($user);
+				$_SESSION['logged_user'] = $created_user->id;
+				Utils::redirect_to('/users/show', "Welcome to AnswerHub " . $user['username'] . "!");
+			}
+			
+			catch(Exception $e) {
+				Utils::redirect_to('/login', 'Username ' . $user['username'] . ' is already in use!');
+			}
 		}
 		
 		public static function edit_user_info() {
@@ -79,29 +93,33 @@
 			Utils::render_content('views/login-page.php');
 		}
 		
-		public static function admin_page() {
-			Utils::render_content('views/admin-page.php');
-		}
-		
 		public static function log_in() {
 			$login_user = User_Model::find_log_in($_POST['login-username'], $_POST['login-password']);
 			
 			if(is_null($login_user)) {
-				Utils::redirect_to('location: /login', "log in failed. Invalid username or password.");
+				Utils::redirect_to('/login', "log in failed. Invalid username or password.");
 				return;
 			}
 						
 			$_SESSION['logged_user'] = $login_user->id;
-			Utils::redirect_to('Location: /', "log in succesfull");
+			Utils::redirect_to('/', "log in succesfull");
 		}
 		
 		public static function log_out() {
 			unset($_SESSION['logged_user']);
-			Utils::redirect_to('location: /', "log out succesfull");
+			Utils::redirect_to('/', "log out succesfull");
+		}
+		
+		
+		private static function validate_user_data($user_table) {
+			if($user_table['email'] == "" || $user_table['username'] == "") {
+				return false;
+			}
+			return true;
 		}
 		
 		private static function validate_password($password) {
-			if(srtlen($password) < 8) {
+			if(strlen($password) < 8) {
 				return false;
 			}
 			
