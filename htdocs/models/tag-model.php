@@ -14,7 +14,8 @@
 		
 		public static function find_tag($id) {
 			try {
-				return self::gather_data(Utils::execute_query("SELECT * FROM tags WHERE id = :id", array('id' => $id)))[0];
+				$array = self::gather_data(Utils::execute_query("SELECT * FROM tags WHERE id = :id", array('id' => $id)));
+				return $array[0];
 			}
 			
 			catch(Exception $e) {
@@ -25,7 +26,8 @@
 		public static function find_tag_by_name($name) {
 		
 			try {
-				return self::gather_data(Utils::execute_query("SELECT * FROM tags WHERE name = :name", array('name' => $name)))[0];
+				$array = self::gather_data(Utils::execute_query("SELECT * FROM tags WHERE name = :name", array('name' => $name)));
+				return $array[0];
 			}
 			
 			catch(Exception $e) {
@@ -38,11 +40,12 @@
 			$query_prepared = $connection->prepare("INSERT INTO tags (name) VALUES(:name)");
 			$query_prepared->execute(array('name' => $name));
 						
-			return self::gather_data(Utils::execute_query("SELECT * FROM tags WHERE id = :last_inserted_id", array('last_inserted_id' => $connection->lastInsertId())))[0];
+			$array = self::gather_data(Utils::execute_query("SELECT * FROM tags WHERE id = :last_inserted_id", array('last_inserted_id' => $connection->lastInsertId())));
+			return $array[0];
 		}
 				
 		public static function gather_data($query) {
-			$result = [];
+			$result = array();
 			
 			while($line = $query->fetch()) {
 

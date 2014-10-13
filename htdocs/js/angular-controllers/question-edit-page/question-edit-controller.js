@@ -4,17 +4,19 @@ AnswerHubApp.controller('QuestionEditController', ['$scope','$http', function($s
 	$http.get('/questions-json/' + QUESTION_ID).success(function(data) {
 		$scope.question = data;
 	});
-	
+
 	$http.get('/questions-json/tags/' + QUESTION_ID).success(function(data) {
 		var tags_string = "";
-		
-		data.forEach(function(data){
-			tags_string = tags_string + " " + tag.name;
+
+		data.forEach(function(tag){
+			tags_string += " " + tag.name;
 		});
-		
+
 		tags_string = tags_string.trim();
-		tags_string = tags_string.replace(" ", ", ");
-		
+
+		var reg = RegExp(" ", 'g');
+		tags_string = tags_string.replace(reg, ", ");
+
 		$scope.tags = tags_string;
 	});
 }]);

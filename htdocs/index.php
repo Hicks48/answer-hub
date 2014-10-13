@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once 'vendors/Slim/Slim.php';
 require_once 'utils/utils.php';
 require_once 'models/answer-model.php';
@@ -36,8 +36,8 @@ $app->post('/users/login', function(){
 	User_Controller::log_in();
 });
 
-$app->post('users/delete', function() {
-	User_Conroller::delete_user();
+$app->post('/users/delete', function() {
+	User_Controller::delete_user();
 });
 
 /* new question page */

@@ -2,7 +2,7 @@ AnswerHubApp.controller('UserEditController', ['$scope','$http', function($scope
 	$scope.user = $.jStorage.get('user');
 	$scope.username = $scope.user.username;
 	$scope.email = $scope.user.email;
-	
+
 	$scope.edit_user_info = function() {
 		$.ajax({
 			type: 'POST',
@@ -13,7 +13,7 @@ AnswerHubApp.controller('UserEditController', ['$scope','$http', function($scope
 			$scope.$apply();
 		});
 	}
-	
+
 	$scope.edit_password = function() {
 		$.ajax({
 			type: 'POST',
@@ -29,12 +29,16 @@ AnswerHubApp.controller('UserEditController', ['$scope','$http', function($scope
 			$scope.$apply();
 		});
 	}
-	
+
 	$scope.delete_user = function() {
+		if(!confirm("Are sure you wan't delete user?")){
+			return;
+		}
+
 		$.ajax({
 			type: 'POST',
-			url: 'users/delete'
+			url: '/users/delete'
 		});
 	}
-	
+
 }]);
