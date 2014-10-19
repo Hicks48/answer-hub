@@ -1,0 +1,1 @@
+DROP TABLE users, questions, answers, questions_to_tags, tags, ratings;

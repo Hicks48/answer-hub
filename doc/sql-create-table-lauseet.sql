@@ -15,7 +15,6 @@ CREATE TABLE questions
 	question text NOT NULL,
 	asked_by int NOT NULL,
 	time_asked timestamp NOT NULL,
-	last_edited timestamp NOT NULL,
 	PRIMARY KEY(id),
 	FOREIGN KEY(asked_by) REFERENCES users(id)
 );
@@ -36,7 +35,7 @@ CREATE TABLE answers
 CREATE TABLE tags
 (
 	id int NOT NULL UNIQUE AUTO_INCREMENT,
-	name varchar(25) NOT NULL,
+	name varchar(25) UNIQUE NOT NULL,
 	PRIMARY KEY(id)
 );
 

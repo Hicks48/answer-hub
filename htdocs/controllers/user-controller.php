@@ -85,7 +85,6 @@
 			unset($_SESSION['logged_user']);
 
 			User_Model::delete_user($user);
-			Utils::redirect_to('/', 'User succesfully deleted!');
 		}
 
 		public static function show_log_in_page() {

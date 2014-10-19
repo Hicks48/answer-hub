@@ -38,6 +38,8 @@ AnswerHubApp.controller('UserEditController', ['$scope','$http', function($scope
 		$.ajax({
 			type: 'POST',
 			url: '/users/delete'
+		}).success(function(){
+			location.reload();
 		});
 	}
 

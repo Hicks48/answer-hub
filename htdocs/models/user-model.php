@@ -58,7 +58,21 @@
 		}
 
 		public static function delete_user($user) {
-			/* References delete using on cascade delete */
+			/* Delete ratings of user */
+			Utils::execute_query("DELETE FROM ratings WHERE rated_by = :id", array('id' => $user->id));
+
+			/* Delete answers */
+			Utils::execute_query("DELETE FROM answers WHERE answer_by = :id", array('id' => $user->id));
+
+			/* Delete questions */
+			$users_questions = Question_Model::gather_data(Utils::execute_query("Select * FROM questions WHERE asked_by = :id", array('id' => $user->id)));
+			for($i = 0;$i < count($users_questions);$i = $i + 1) {
+				Question_Model::delete_question($users_questions[$i]);
+			}
+
+			//Utils::execute_query("DELETE FROM questions WHERE asked_by = :id", array('id' => $user->id));
+
+			/* Delete user */
 			Utils::execute_query("DELETE FROM users WHERE id = :id", array('id' => $user->id));
 		}
 

@@ -39,11 +39,11 @@
 		public static function save_question($question) {
 			$connection = Utils::database_connection();
 			$query_prepared = $connection->prepare("INSERT INTO questions (title, question, asked_by, time_asked)
-			VALUES(:title, :question, :asked_by, NOW()");
+			VALUES(:title, :question, :asked_by, NOW())");
 			$query_prepared->execute($question);
 
 			$array = self::gather_data(Utils::execute_query("SELECT * FROM questions WHERE id = :last_inserted_id", array('last_inserted_id' => $connection->lastInsertId())));
-			return $array;
+			return $array[0];
 		}
 
 		public static function edit_question($question) {
@@ -67,7 +67,7 @@
 			/* Delete tag relationships to question */
 			Questions_To_Tags_Model::remove_all_tags_from_question($question);
 
-			/* Delete rating sor question */
+			/* Delete rating of question */
 			Utils::execute_query("DELETE FROM ratings WHERE question_id = :question_id", array('question_id' => $question->id));
 
 			/* Delete question */
@@ -96,7 +96,7 @@
 			return self::gather_data(Utils::execute_query($query));
 		}
 
-		private static function gather_data($query) {
+		public static function gather_data($query) {
 			$result = array();
 
 			while($line = $query->fetch()) {
